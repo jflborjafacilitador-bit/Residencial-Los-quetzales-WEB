@@ -685,6 +685,24 @@ section { padding: 80px 0; }
 }
 .hamburger span { width: 26px; height: 2px; background: var(--dark); display: block; transition: var(--transition); }
 
+/* ─── SOCIAL ICON BUTTONS ─── */
+.soc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  transition: transform 0.2s, opacity 0.2s;
+  flex-shrink: 0;
+}
+.soc-btn:hover { transform: translateY(-2px); opacity: 0.85; }
+.soc-btn svg { width: 18px; height: 18px; fill: #fff; display: block; }
+.soc-fb  { background: #1877F2; }
+.soc-ig  { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+.soc-tt  { background: #010101; }
+.soc-wa  { background: #25D366; }
+
 @media (max-width: 900px) {
   .navbar { padding: 0 20px; }
   .navbar-links { display: none; }
