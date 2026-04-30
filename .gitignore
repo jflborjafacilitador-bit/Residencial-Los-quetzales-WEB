@@ -1,0 +1,32 @@
+# Dependencias
+node_modules/
+.npm/
+
+# Archivos temporales de sistemas
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Variables de entorno
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build
+dist/
+build/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Stitch (archivos internos de trabajo)
+.stitch/
+
+# Antigravity brain
+.gemini/
