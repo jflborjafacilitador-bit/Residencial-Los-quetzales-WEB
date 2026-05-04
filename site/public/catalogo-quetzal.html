@@ -13,6 +13,12 @@
     .spec-value { font-family:'Poppins',sans-serif; font-weight:700; color:var(--dark); }
     .plano-card { border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-sm); border:1px solid var(--gray-200); }
     .acabado-tag { display:inline-block; background:var(--green-bg); color:var(--green-dark); font-size:12px; font-weight:600; padding:4px 12px; border-radius:20px; margin:4px; font-family:'Poppins',sans-serif; }
+
+    @media (max-width: 768px) {
+      .spec-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .spec-value { font-size: 14px; text-align: left; }
+      .grid-specs, .grid-elite, .grid-2 { grid-template-columns: 1fr !important; gap: 24px !important; }
+    }
   </style>
 </head>
 <body>
