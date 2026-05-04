@@ -1,256 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Disponibilidad – Residencial Los Quetzales</title>
-  <meta name="description" content="Consulta la disponibilidad de casas en Residencial Los Quetzales. Modelos Quetzal y Quetzal Plus en preventa y venta.">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Disponibilidad – Residencial Los Quetzales</title>
+<meta name="description" content="Consulta la disponibilidad real de casas en Residencial Los Quetzales. Manzana 2 Tucán (venta) y Manzana 3 Ave del Paraíso (preventa). Filtra por modelo y estatus.">
+<link rel="stylesheet" href="style.css">
+<script src="inventario.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+.tab-btn{padding:12px 28px;font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;border:2px solid var(--gray-200);background:#fff;border-radius:40px;cursor:pointer;transition:all .25s;color:var(--gray-600);}
+.tab-btn.active-green{background:var(--green-dark);color:#fff;border-color:var(--green-dark);}
+.tab-btn.active-orange{background:#e84a10;color:#fff;border-color:#e84a10;}
+.tab-btn:hover:not(.active-green):not(.active-orange){background:var(--cream);border-color:var(--gray-300);}
+.stat-card{background:#fff;border-radius:var(--radius-lg);padding:20px 24px;text-align:center;box-shadow:var(--shadow-md);border:1px solid var(--gray-200);transition:transform .2s;}
+.stat-card:hover{transform:translateY(-3px);}
+.stat-num{font-family:'Poppins',sans-serif;font-weight:800;font-size:32px;line-height:1;}
+.stat-label{font-size:12px;color:var(--gray-500);margin-top:4px;font-weight:600;}
+.inv-table{width:100%;border-collapse:collapse;font-size:14px;}
+.inv-table th{background:var(--cream);padding:10px 14px;text-align:left;font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;color:var(--gray-600);border-bottom:2px solid var(--gray-200);text-transform:uppercase;letter-spacing:0.5px;}
+.inv-table td{padding:10px 14px;border-bottom:1px solid var(--gray-200);vertical-align:middle;}
+.inv-table tr:hover{background:#fafafa;}
+.badge-disp{display:inline-block;background:var(--green-bg);color:var(--green-dark);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'Poppins',sans-serif;}
+.badge-nodisp{display:inline-block;background:#fff3f0;color:#b33000;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'Poppins',sans-serif;}
+.filter-pill{padding:8px 16px;font-size:13px;font-family:'Poppins',sans-serif;font-weight:600;border:1.5px solid var(--gray-200);border-radius:30px;background:#fff;cursor:pointer;transition:all .2s;color:var(--gray-600);}
+.filter-pill.active{background:var(--dark);color:#fff;border-color:var(--dark);}
+.croquis-wrap{position:relative;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);cursor:zoom-in;}
+.croquis-wrap img{width:100%;height:auto;display:block;transition:transform .3s;}
+.croquis-wrap:hover img{transform:scale(1.03);}
+#inv-panel{display:none;}
+#croquis-panel{display:block;}
+</style>
 </head>
 <body>
-
 <nav class="navbar">
-  <div class="navbar-logo">
-    <img src="Material/Logo 1.1 sin fondo.png" alt="Residencial Los Quetzales">
-  </div>
+  <div class="navbar-logo"><img src="Material/Logo 1.1 sin fondo.png" alt="Residencial Los Quetzales"></div>
   <div class="navbar-links">
     <a href="index.html">Inicio</a>
     <a href="tucan.html">Tucán</a>
     <a href="ave-de-paraiso.html">Ave de Paraíso</a>
     <a href="propiedades.html" class="active">Disponibilidad</a>
-    <a href="contacto.html">Contacto</a>
+    <a href="calculadora.html">Calculadora</a><a href="contacto.html">Contacto</a>
   </div>
   <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary">📅 Agendar Visita</a>
 </nav>
 
+<!-- HERO -->
 <div class="page-hero">
-  <div class="section-tag" style="background:rgba(255,255,255,0.2);color:#fff;">325 Casas · 5 Privadas</div>
+  <div class="section-tag" style="background:rgba(255,255,255,0.2);color:#fff;" id="hero-badge">Cargando disponibilidad…</div>
   <h1 style="margin-top:12px;">Disponibilidad Actual</h1>
-  <p>Consulta nuestros modelos disponibles y descarga la lista de precios actualizada</p>
+  <p>Consulta el estatus real de cada manzana y descarga la lista de precios actualizada</p>
 </div>
 
-<section style="background:var(--cream);">
+<!-- STATS GLOBALES -->
+<section style="background:#fff;padding:40px 0;">
   <div class="container">
-    <!-- Folleto Banner -->
-    <div class="folleto-banner" style="margin-bottom:40px;">
-      <div>
-        <h3>📥 Lista de Precios — 30 de Abril 2026</h3>
-        <p>Precios actualizados de todos los modelos y etapas del proyecto.</p>
-      </div>
-      <a href="Material/Informacion/Lista_Precios_Quetzales_30_de_abril_de_2026.pdf" download class="btn-white">⬇ Descargar PDF</a>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;" id="stats-grid">
+      <!-- JS fills this -->
     </div>
 
-    <!-- Filtros -->
-    <div class="filters">
-      <div class="filter-group">
-        <label>Modelo</label>
-        <select id="f-modelo">
-          <option value="">Todos los modelos</option>
-          <option>Quetzal</option>
-          <option>Quetzal Elite</option>
-          <option>Quetzal Plus</option>
-          <option>Quetzal Plus Elite</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Etapa</label>
-        <select id="f-etapa">
-          <option value="">Preventa y Venta</option>
-          <option>Preventa</option>
-          <option>Venta</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Recámaras</label>
-        <select id="f-rec">
-          <option value="">Cualquiera</option>
-          <option>2 recámaras</option>
-          <option>3 recámaras</option>
-          <option>4 recámaras</option>
-        </select>
-      </div>
-      <div>
-        <a href="contacto.html" class="btn-primary" style="padding:12px 24px;">🔍 Consultar disponibilidad</a>
+    <!-- TABS MANZANA -->
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;">
+      <button class="tab-btn active-green" id="tab-m2" onclick="switchMza(2)">🟢 Manzana 2 — Tucán (Venta)</button>
+      <button class="tab-btn" id="tab-m3" onclick="switchMza(3)">🔥 Manzana 3 — Ave del Paraíso (Preventa)</button>
+    </div>
+
+    <!-- VISTA: Croquis / Tabla -->
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:28px;">
+      <button class="filter-pill active" id="view-croquis" onclick="switchView('croquis')">🗺️ Croquis</button>
+      <button class="filter-pill" id="view-inv" onclick="switchView('inv')">📋 Lista de unidades</button>
+    </div>
+
+    <!-- CROQUIS PANEL -->
+    <div id="croquis-panel">
+      <div style="display:grid;grid-template-columns:1fr 200px;gap:28px;align-items:start;" id="croquis-content">
+        <!-- JS fills -->
       </div>
     </div>
 
-    <!-- Cards -->
-    <div class="grid-3">
-      <!-- Quetzal Preventa -->
-      <div class="card">
-        <div class="card-img">
-          <img src="Material/Quetzal/1.png" alt="Modelo Quetzal Preventa" loading="lazy">
-          <div class="badge-card badge-preventa">Preventa</div>
-        </div>
-        <div class="card-body">
-          <div class="card-price">Precio Especial</div>
-          <div class="card-title">Modelo Quetzal</div>
-          <div class="card-location">📍 Residencial Los Quetzales</div>
-          <div class="card-specs">
-            <div class="card-spec">🛏️ 2 Rec.</div>
-            <div class="card-spec">🚿 1.5 Baños</div>
-            <div class="card-spec">🏗️ 82 m²</div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:14px;">
-            <a href="catalogo-quetzal.html" class="btn-outline" style="flex:1;justify-content:center;padding:10px;">Ver más</a>
-            <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="flex:1;justify-content:center;padding:10px;">Reservar</a>
-          </div>
-        </div>
+    <!-- INVENTARIO PANEL -->
+    <div id="inv-panel">
+      <!-- Filtros -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;" id="filtros">
+        <button class="filter-pill active" data-filter="todos" onclick="filterInv(this,'todos')">Todos</button>
+        <button class="filter-pill" data-filter="disponible" onclick="filterInv(this,'disponible')">✅ Disponibles</button>
+        <button class="filter-pill" data-filter="no-disponible" onclick="filterInv(this,'no-disponible')">🔴 No disponibles</button>
       </div>
-
-      <!-- Quetzal Venta -->
-      <div class="card">
-        <div class="card-img">
-          <img src="Material/Quetzal/3.png" alt="Modelo Quetzal Venta" loading="lazy">
-          <div class="badge-card badge-venta">Venta</div>
-        </div>
-        <div class="card-body">
-          <div class="card-price">Precio de Lista</div>
-          <div class="card-title">Modelo Quetzal</div>
-          <div class="card-location">📍 Residencial Los Quetzales</div>
-          <div class="card-specs">
-            <div class="card-spec">🛏️ 2 Rec.</div>
-            <div class="card-spec">🚿 1.5 Baños</div>
-            <div class="card-spec">🏗️ 82 m²</div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:14px;">
-            <a href="catalogo-quetzal.html" class="btn-outline" style="flex:1;justify-content:center;padding:10px;">Ver más</a>
-            <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="flex:1;justify-content:center;padding:10px;">Agendar</a>
-          </div>
-        </div>
+      <div style="overflow-x:auto;border-radius:var(--radius-lg);box-shadow:var(--shadow-md);border:1px solid var(--gray-200);">
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>#Casa</th><th>Privada</th><th>Modelo</th><th>Const.</th><th>Terreno</th><th>Esquema de Venta</th><th>Estatus</th><th>Entrega</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="inv-tbody"></tbody>
+        </table>
       </div>
-
-      <!-- Quetzal Plus Preventa -->
-      <div class="card">
-        <div class="card-img">
-          <img src="Material/Quetzal Plus/1.jpg" alt="Modelo Quetzal Plus Preventa" loading="lazy">
-          <div class="badge-card badge-preventa">Preventa</div>
-        </div>
-        <div class="card-body">
-          <div class="card-price">Precio Especial</div>
-          <div class="card-title">Modelo Quetzal Plus</div>
-          <div class="card-location">📍 Residencial Los Quetzales</div>
-          <div class="card-specs">
-            <div class="card-spec">🛏️ 3 Rec.</div>
-            <div class="card-spec">🚿 2.5 Baños</div>
-            <div class="card-spec">🏗️ Mayor m²</div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:14px;">
-            <a href="catalogo-quetzal-plus.html" class="btn-outline" style="flex:1;justify-content:center;padding:10px;">Ver más</a>
-            <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="flex:1;justify-content:center;padding:10px;">Reservar</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quetzal Plus Venta -->
-      <div class="card">
-        <div class="card-img">
-          <img src="Material/Quetzal Plus/4.jpg" alt="Modelo Quetzal Plus Venta" loading="lazy">
-          <div class="badge-card badge-venta">Venta</div>
-        </div>
-        <div class="card-body">
-          <div class="card-price">Precio de Lista</div>
-          <div class="card-title">Modelo Quetzal Plus</div>
-          <div class="card-location">📍 Residencial Los Quetzales</div>
-          <div class="card-specs">
-            <div class="card-spec">🛏️ 3 Rec.</div>
-            <div class="card-spec">🚿 2.5 Baños</div>
-            <div class="card-spec">🏗️ Mayor m²</div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:14px;">
-            <a href="catalogo-quetzal-plus.html" class="btn-outline" style="flex:1;justify-content:center;padding:10px;">Ver más</a>
-            <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="flex:1;justify-content:center;padding:10px;">Agendar</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quetzal Elite -->
-      <div class="card" style="border:2px solid var(--orange);">
-        <div class="card-img">
-          <img src="Material/Quetzal/2.png" alt="Modelo Quetzal Elite" loading="lazy">
-          <div class="badge-card" style="background:var(--orange);">🏅 Elite</div>
-        </div>
-        <div class="card-body">
-          <div class="card-price">Versión Premium</div>
-          <div class="card-title">Modelo Quetzal Elite</div>
-          <div class="card-location">📍 Residencial Los Quetzales</div>
-          <div style="font-size:12px;color:var(--orange);font-weight:700;font-family:'Poppins',sans-serif;margin:6px 0;background:#fff8f0;padding:6px 10px;border-radius:6px;">🛏️ +1 recámara en planta baja</div>
-          <div class="card-specs">
-            <div class="card-spec">🛏️ 3 Rec.</div>
-            <div class="card-spec">🚿 1.5 Baños</div>
-            <div class="card-spec">🏗️ 82 m²</div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:14px;">
-            <a href="catalogo-quetzal.html#elite" class="btn-outline" style="flex:1;justify-content:center;padding:10px;">Ver más</a>
-            <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="flex:1;justify-content:center;padding:10px;background:var(--orange);">Reservar</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quetzal Plus Elite -->
-      <div class="card" style="border:2px solid var(--orange);">
-        <div class="card-img">
-          <img src="Material/Quetzal Plus/2.jpg" alt="Modelo Quetzal Plus Elite" loading="lazy">
-          <div class="badge-card" style="background:var(--orange);">🏅 Elite</div>
-        </div>
-        <div class="card-body">
-          <div class="card-price">Versión Premium</div>
-          <div class="card-title">Modelo Quetzal Plus Elite</div>
-          <div class="card-location">📍 Residencial Los Quetzales</div>
-          <div style="font-size:12px;color:var(--orange);font-weight:700;font-family:'Poppins',sans-serif;margin:6px 0;background:#fff8f0;padding:6px 10px;border-radius:6px;">🛏️ +1 recámara en planta baja</div>
-          <div class="card-specs">
-            <div class="card-spec">🛏️ 4 Rec.</div>
-            <div class="card-spec">🚿 2.5 Baños</div>
-            <div class="card-spec">🏗️ Mayor m²</div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:14px;">
-            <a href="catalogo-quetzal-plus.html#elite" class="btn-outline" style="flex:1;justify-content:center;padding:10px;">Ver más</a>
-            <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="flex:1;justify-content:center;padding:10px;background:var(--orange);">Reservar</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Reserva -->
-      <div class="card">
-        <div class="card-img">
-          <img src="Material/reserva.png" alt="Reserva tu casa" loading="lazy">
-          <div class="badge-card badge-nuevo">Nuevo</div>
-        </div>
-        <div class="card-body">
-          <div class="card-price">Reserva con poco</div>
-          <div class="card-title">Aparta tu Casa Hoy</div>
-          <div class="card-location">📍 Disponibilidad limitada</div>
-          <div style="font-size:14px;color:var(--gray-500);margin:10px 0 14px;">Separa tu casa con enganche mínimo y asegura el precio de preventa.</div>
-          <a href="contacto.html" class="btn-primary" style="width:100%;justify-content:center;">Consultar condiciones</a>
-        </div>
-      </div>
-
-      <!-- Asesoría -->
-      <div class="card" style="background:linear-gradient(135deg,var(--green-dark) 0%,#0a3d0a 100%);border:none;">
-        <div class="card-img" style="height:180px;">
-          <img src="Material/asesoria.png" alt="Asesoría" style="opacity:0.6;" loading="lazy">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;">🤝</div>
-        </div>
-        <div class="card-body" style="color:#fff;">
-          <div class="card-price" style="color:var(--orange);">Sin costo</div>
-          <div class="card-title" style="color:#fff;">Asesoría Personalizada</div>
-          <div style="font-size:14px;opacity:0.75;margin:8px 0 16px;">Un asesor te acompañará en todo el proceso de compra sin compromiso.</div>
-          <a href="contacto.html" class="btn-primary" style="width:100%;justify-content:center;">Solicitar asesoría</a>
-        </div>
-      </div>
+      <div style="font-size:12px;color:var(--gray-500);margin-top:8px;text-align:right;" id="inv-count"></div>
     </div>
   </div>
 </section>
 
-<!-- Folleto grande -->
-<section style="background:#fff;padding:60px 0;">
+<!-- BANNER PREVENTA -->
+<section style="background:var(--cream);padding:40px 0;">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,#b33000,#e84a10);color:#fff;border-radius:16px;padding:24px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;box-shadow:0 4px 24px rgba(180,50,0,0.3);">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="font-size:40px;">🔥</div>
+        <div>
+          <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;margin-bottom:4px;">Solo Manzana 3 — Ave del Paraíso en Preventa</div>
+          <div style="font-size:14px;opacity:0.9;">Precio especial de lanzamiento. Asegura tu casa antes de que suba el precio.</div>
+        </div>
+      </div>
+      <a href="ave-de-paraiso.html" style="background:#fff;color:#b33000;font-family:'Poppins',sans-serif;font-weight:800;font-size:14px;padding:12px 28px;border-radius:8px;text-decoration:none;white-space:nowrap;">Ver Ave del Paraíso →</a>
+    </div>
+  </div>
+</section>
+
+<!-- DESCARGA -->
+<section style="background:#fff;padding:40px 0;">
   <div class="container">
     <div class="folleto-banner">
       <div>
-        <h3>📄 Descarga el Folleto Completo del Proyecto</h3>
-        <p>Toda la información: historia, modelos, amenidades y formas de pago en un solo documento.</p>
+        <h3>📥 Lista de Precios — 30 de Abril 2026</h3>
+        <p>Precios actualizados de todos los modelos, versiones y manzanas del proyecto.</p>
       </div>
-      <a href="Material/Informacion/UNA_NUEVA_HISTORIA (2).pdf" download class="btn-white">⬇ Descargar Folleto</a>
+      <a href="Material/Informacion/Lista_Precios_Quetzales_30_de_abril_de_2026.pdf" download class="btn-white">⬇ Descargar PDF</a>
     </div>
   </div>
 </section>
@@ -270,10 +144,10 @@
       <p class="footer-tagline">325 casas · 5 privadas · amenidades premium · seguridad 24/7</p>
     </div>
     <div>
-      <div class="footer-col-title">Catálogo</div>
+      <div class="footer-col-title">Manzanas</div>
       <div class="footer-links">
-        <a href="catalogo-quetzal.html">Modelo Quetzal</a>
-        <a href="catalogo-quetzal-plus.html">Modelo Quetzal Plus</a>
+        <a href="tucan.html">Manzana 2 — Tucán</a>
+        <a href="ave-de-paraiso.html">Manzana 3 — Ave del Paraíso</a>
         <a href="propiedades.html">Disponibilidad</a>
       </div>
     </div>
@@ -288,19 +162,254 @@
       <div class="footer-col-title">Contacto</div>
       <div class="footer-contact-item"><span>📞</span><a href="tel:+525646376057" style="color:#888;">+52 56 4637 6057</a></div>
       <div class="footer-contact-item"><span>📧</span><a href="mailto:ventas@residenciallosquetzales.com" style="color:#888;">ventas@residenciallosquetzales.com</a></div>
-      <div style="margin-top:16px;display:flex;gap:14px;">
-        <a href="https://www.facebook.com/profile.php?id=61585518382705" target="_blank" title="Facebook" class="soc-btn soc-fb"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-        <a href="https://www.instagram.com/quetzales_ofic/" target="_blank" title="Instagram" class="soc-btn soc-ig"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-        <a href="https://www.tiktok.com/@residenciallosquetzales" target="_blank" title="TikTok" class="soc-btn soc-tt"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.73a4.85 4.85 0 01-1.01-.04z"/></svg></a>
-        <a href="https://wa.me/525646376057?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Residencial%20Los%20Quetzales" target="_blank" title="WhatsApp" class="soc-btn soc-wa"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-      </div>
     </div>
   </div>
-  <div class="footer-bottom">© 2025 Residencial Los Quetzales · Todos los derechos reservados</div>
+  <div class="footer-bottom">© 2026 Residencial Los Quetzales · Todos los derechos reservados</div>
 </footer>
 
 <a class="wa-float" href="https://wa.me/525646376057?text=Hola,%20me%20interesa%20Residencial%20Los%20Quetzales" target="_blank">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
+
+<script>
+// ── Supabase ─────────────────────────────────────────────────
+const SUPA_URL = 'https://mxucntphfihiyctxiffs.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWNudHBoZmloaXljdHhpZmZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1OTI0NjgsImV4cCI6MjA4ODE2ODQ2OH0.O8laFOL5q-J5f5qIAN1TenRa2Ax2U53XIxR-VOw4LZY';
+const TABLE    = 'inventario_estatus';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// Datos activos (Supabase mezclado con estático de inventario.js)
+let liveData = JSON.parse(JSON.stringify(INVENTARIO));
+
+// ── CONFIG CROQUIS ────────────────────────────────────────────
+const MZA_CONFIG = {
+  2: {
+    nombre: 'Tucán', badge: 'En Venta', color: 'var(--green-dark)',
+    plano: 'Planos/CONDOMINIO 2 TUCAN.png',
+    leyenda: [
+      { color: '#F4A460', label: 'Modelo Quetzal' },
+      { color: '#87CEEB', label: 'Modelo Quetzal Plus' },
+      { color: '#F5F5DC', label: 'Estacionamiento', border: true },
+      { color: '#90EE90', label: 'Áreas verdes' },
+    ]
+  },
+  3: {
+    nombre: 'Ave del Paraíso', badge: '🔥 Preventa', color: '#e84a10',
+    plano: 'Planos/CONDOMINIO 3 AVE DE PARAISO 03-02-26.png',
+    leyenda: [
+      { color: '#98D4A3', label: 'Quetzal Roof Garden' },
+      { color: '#87CEEB', label: 'Quetzal Plus' },
+      { color: '#F4A493', label: 'Quetzal (estándar)' },
+      { color: '#F5F5DC', label: 'Estacionamiento', border: true },
+      { color: '#90EE90', label: 'Áreas verdes' },
+    ]
+  }
+};
+
+let currentMza = 2;
+let currentFilter = 'todos';
+
+// ── SUPABASE LOAD + REALTIME ──────────────────────────────────
+async function initSupabase() {
+  try {
+    const { data: rows, error } = await sb.from(TABLE).select('mza, casa, estatus');
+    if (error) throw error;
+    
+    // Estandarizar base: 'disponible' -> 'DISPONIBLE', 'no-disponible' -> 'EN_PROCESO'
+    liveData.forEach(item => {
+      if (item.estatus === 'disponible') item.estatus = 'DISPONIBLE';
+      if (item.estatus === 'no-disponible') item.estatus = 'EN_PROCESO';
+    });
+
+    // Sobrescribir con Supabase
+    liveData.forEach(item => {
+      const override = rows.find(r => 
+        String(r.mza).trim().toUpperCase() === String(item.mza).trim().toUpperCase() && 
+        String(r.casa).trim().toUpperCase() === String(item.casa).trim().toUpperCase()
+      );
+      if (override) {
+        item.estatus = override.estatus ? override.estatus.toUpperCase() : item.estatus; // 'DISPONIBLE', 'EN_PROCESO', 'VENDIDA'
+      }
+    });
+
+    // Ocultar las VENDIDAS de la vista web pública
+    liveData = liveData.filter(e => e.estatus && e.estatus.toUpperCase() !== 'VENDIDA');
+
+    updateHeroBadge(true);
+    renderAll();
+    subscribeRealtime();
+  } catch(e) {
+    console.warn('Supabase no disponible, usando datos estáticos.', e);
+    liveData.forEach(item => {
+      if (item.estatus === 'disponible') item.estatus = 'DISPONIBLE';
+      if (item.estatus === 'no-disponible') item.estatus = 'EN_PROCESO';
+    });
+    updateHeroBadge(false);
+    renderAll();
+  }
+}
+
+function updateHeroBadge(live) {
+  const b = document.getElementById('hero-badge');
+  if (!b) return;
+  b.innerHTML = live
+    ? '<span style="display:inline-flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse-live 2s infinite;"></span>Disponibilidad en Tiempo Real</span>'
+    : 'Inventario Actualizado · Mayo 2026';
+}
+
+function subscribeRealtime() {
+  sb.channel('prop_live')
+    .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, payload => {
+      const r = payload.new;
+      if (!r) return;
+      
+      const rMza = String(r.mza).trim().toUpperCase();
+      const rCasa = String(r.casa).trim().toUpperCase();
+      const idx = liveData.findIndex(e => String(e.mza).trim().toUpperCase() === rMza && String(e.casa).trim().toUpperCase() === rCasa);
+      
+      if (r.estatus && r.estatus.toUpperCase() === 'VENDIDA') {
+        // Ocultar si se vendió
+        if (idx >= 0) liveData.splice(idx, 1);
+      } else {
+        // Actualizar o recuperar
+        if (idx >= 0) {
+          liveData[idx].estatus = r.estatus;
+        } else {
+          // Recuperar de INVENTARIO si estaba VENDIDA y volvió a DISPONIBLE
+          const original = INVENTARIO.find(e => String(e.mza).trim().toUpperCase() === rMza && String(e.casa).trim().toUpperCase() === rCasa);
+          if (original) {
+            const restored = JSON.parse(JSON.stringify(original));
+            restored.estatus = r.estatus ? r.estatus.toUpperCase() : restored.estatus;
+            liveData.push(restored);
+            liveData.sort((a,b) => parseInt(a.casa) - parseInt(b.casa));
+          }
+        }
+      }
+      renderAll();
+    })
+    .subscribe();
+}
+
+function renderStats() {
+  const m2 = liveData.filter(e => e.mza === 2);
+  const m3 = liveData.filter(e => e.mza === 3);
+  const m2Disp = m2.filter(e => e.estatus === 'DISPONIBLE').length;
+  const m3Protos = [...new Set(m3.map(e => e.prototipo))].length;
+
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--green-dark);">64</div>
+      <div class="stat-label">Casas — M2 Tucán</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--green);">${m2Disp}</div>
+      <div class="stat-label">Disponibles Manzana 2</div>
+    </div>
+    <div class="stat-card" style="border-color:rgba(232,74,16,.3);">
+      <div class="stat-num" style="color:#e84a10;">77</div>
+      <div class="stat-label">Casas — M3 Ave del Paraíso 🔥</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--gray-400);">${m3Protos}</div>
+      <div class="stat-label">Modelos en preventa</div>
+    </div>
+  `;
+}
+
+function renderCroquis(mza) {
+  const cfg = MZA_CONFIG[mza];
+  const leyendaHTML = cfg.leyenda.map(l => `
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:16px;height:16px;border-radius:3px;background:${l.color};flex-shrink:0;${l.border ? 'border:1px dashed #aaa;' : ''}"></div>
+      <span style="font-size:12px;color:var(--gray-600);">${l.label}</span>
+    </div>`).join('');
+
+  const stats = liveData.filter(e => e.mza === mza);
+  const disp = stats.filter(e => e.estatus === 'DISPONIBLE').length;
+  const noDisp = stats.filter(e => e.estatus === 'EN_PROCESO').length;
+
+  document.getElementById('croquis-content').innerHTML = `
+    <div class="croquis-wrap" onclick="this.classList.toggle('zoomed')" style="border:2px solid ${cfg.color}20;">
+      <img src="${cfg.plano}" alt="Croquis Manzana ${mza} ${cfg.nombre}">
+    </div>
+    <div style="background:#fff;border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-md);border:1px solid var(--gray-200);">
+      <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:var(--dark);margin-bottom:4px;">Manzana ${mza}</div>
+      <div style="display:inline-block;background:${cfg.color};color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;font-family:'Poppins',sans-serif;margin-bottom:16px;">${cfg.badge}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">${leyendaHTML}</div>
+      <div style="padding-top:14px;border-top:1px solid var(--gray-200);">
+        <div style="font-size:12px;color:var(--gray-500);margin-bottom:6px;">Inventario actual:</div>
+        ${disp > 0 ? `<div style="font-size:13px;font-weight:700;color:var(--green-dark);">✅ ${disp} disponibles</div>` : ''}
+        ${noDisp > 0 ? `<div style="font-size:13px;font-weight:700;color:#b33000;">📋 ${noDisp} en proceso</div>` : ''}
+        <div style="font-size:12px;color:var(--gray-500);margin-top:8px;">Total: ${stats.length} unidades listadas</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderTable(mza, filter) {
+  let rows = liveData.filter(e => e.mza === mza);
+  if (filter === 'disponible') rows = rows.filter(e => e.estatus === 'DISPONIBLE');
+  if (filter === 'no-disponible') rows = rows.filter(e => e.estatus === 'EN_PROCESO');
+
+  const tbody = document.getElementById('inv-tbody');
+  tbody.innerHTML = rows.map(e => `
+    <tr>
+      <td><strong>Casa ${e.casa}</strong></td>
+      <td>${e.privada}</td>
+      <td style="font-weight:600;">${e.prototipo}</td>
+      <td>${e.m2Const} m²</td>
+      <td>${e.m2Terreno} m²</td>
+      <td style="font-size:12px;color:var(--gray-500);">${e.esquema || '—'}</td>
+      <td><span class="${e.estatus === 'DISPONIBLE' ? 'badge-disp' : 'badge-nodisp'}">${e.estatus === 'DISPONIBLE' ? '✅ Disponible' : '📋 En proceso'}</span></td>
+      <td style="font-size:12px;color:var(--gray-500);">${e.entrega || '—'}</td>
+      <td><a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" style="font-size:12px;font-weight:700;color:var(--green-dark);text-decoration:none;white-space:nowrap;">Consultar →</a></td>
+    </tr>`).join('');
+  document.getElementById('inv-count').textContent = `Mostrando ${rows.length} unidades`;
+}
+
+function renderAll() {
+  renderStats();
+  renderCroquis(currentMza);
+  renderTable(currentMza, currentFilter);
+}
+
+function switchMza(mza) {
+  currentMza = mza;
+  currentFilter = 'todos';
+
+  // Reset filter pills
+  document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-filter="todos"]').classList.add('active');
+
+  // Update tabs
+  document.getElementById('tab-m2').className = 'tab-btn' + (mza === 2 ? ' active-green' : '');
+  document.getElementById('tab-m3').className = 'tab-btn' + (mza === 3 ? ' active-orange' : '');
+
+  renderCroquis(mza);
+  renderTable(mza, 'todos');
+}
+
+function switchView(view) {
+  document.getElementById('croquis-panel').style.display = view === 'croquis' ? 'block' : 'none';
+  document.getElementById('inv-panel').style.display = view === 'inv' ? 'block' : 'none';
+  document.getElementById('view-croquis').className = 'filter-pill' + (view === 'croquis' ? ' active' : '');
+  document.getElementById('view-inv').className = 'filter-pill' + (view === 'inv' ? ' active' : '');
+}
+
+function filterInv(btn, filter) {
+  currentFilter = filter;
+  document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable(currentMza, filter);
+}
+
+// Init — Supabase primero, fallback estático
+initSupabase();
+
+// Animación pulse para badge en tiempo real
+const styleRT = document.createElement('style');
+styleRT.textContent = '@keyframes pulse-live{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.4);}}';
+document.head.appendChild(styleRT);
+</script>
 </body>
 </html>

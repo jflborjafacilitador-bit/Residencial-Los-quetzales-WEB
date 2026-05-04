@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -15,6 +15,40 @@
 .avaluo{font-size:12px;color:var(--gray-400);}
 .modelo-card{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden;border:1px solid var(--gray-200);}
 .modelo-card.elite-border{border:2px solid var(--orange);}
+/* Dropdown Calcular */
+.calc-dropdown { position:relative; flex:1; }
+.calc-dropdown .calc-btn {
+  width:100%; display:flex; align-items:center; justify-content:center;
+  gap:6px; padding:11px; font-size:13px; font-weight:700;
+  font-family:'Poppins',sans-serif; border:none; border-radius:var(--radius);
+  cursor:pointer; background:linear-gradient(135deg,#2E8B2E,#8DC63F);
+  color:#fff; transition:var(--transition); white-space:nowrap;
+}
+.calc-dropdown .calc-btn:hover { opacity:.92; }
+.calc-dropdown .calc-menu {
+  display:none; position:absolute; bottom:calc(100% + 6px); left:0; right:0;
+  background:#fff; border:1px solid rgba(46,139,46,0.25);
+  border-radius:var(--radius); box-shadow:0 8px 24px rgba(0,0,0,0.14);
+  overflow:hidden; z-index:100; min-width:220px;
+}
+.calc-dropdown:hover .calc-menu,
+.calc-dropdown .calc-menu:hover { display:block; }
+.calc-menu-header {
+  font-family:'Poppins',sans-serif; font-size:10px; font-weight:700;
+  color:#888; text-transform:uppercase; letter-spacing:.05em;
+  padding:10px 14px 6px;
+}
+.calc-menu a {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:9px 14px; font-size:12.5px; font-family:'Poppins',sans-serif;
+  font-weight:600; color:var(--dark); text-decoration:none;
+  transition:background .15s;
+  border-top:1px solid var(--gray-100);
+}
+.calc-menu a:hover { background:var(--green-bg); color:var(--green-dark); }
+.calc-menu a .price { font-size:11.5px; color:var(--gray-500); font-weight:500; }
+.calc-menu a.elite .price { color:var(--orange); }
+.calc-menu a.elite { border-left:3px solid var(--orange); }
 </style>
 </head>
 <body>
@@ -25,7 +59,7 @@
     <a href="tucan.html" class="active">Tucán</a>
     <a href="ave-de-paraiso.html">Ave de Paraíso</a>
     <a href="propiedades.html">Disponibilidad</a>
-    <a href="contacto.html">Contacto</a>
+    <a href="calculadora.html">Calculadora</a><a href="contacto.html">Contacto</a>
   </div>
   <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary">📅 Agendar Visita</a>
 </nav>
@@ -34,8 +68,9 @@
   <img src="Material/Quetzal/1.png" alt="Tucán" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
   <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,rgba(10,60,10,0.45) 60%);"></div>
   <div class="container" style="position:relative;z-index:2;color:#fff;padding-bottom:56px;padding-top:80px;">
-    <div class="section-tag" style="background:var(--green);color:#fff;">Privada Exclusiva</div>
-    <h1 style="font-size:clamp(36px,6vw,64px);font-weight:800;margin:12px 0 16px;">Manzana <span style="color:var(--green-light);">2</span></h1>
+    <div class="section-tag" style="background:var(--green);color:#fff;">Privada Tucán · En Venta</div>
+    <h1 style="font-size:clamp(36px,6vw,64px);font-weight:800;margin:12px 0 8px;">Manzana <span style="color:var(--green-light);">2</span></h1>
+    <p style="font-size:15px;opacity:0.7;margin-bottom:12px;font-family:'Poppins',sans-serif;font-weight:600;letter-spacing:0.5px;">64 CASAS · PRIVADA TUCÁN</p>
     <p style="font-size:17px;opacity:0.85;margin-bottom:28px;max-width:560px;">2 modelos en 4 versiones cada uno. Casas de 2 niveles con jardín privado, estacionamiento y acceso a todas las amenidades.</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="font-size:16px;padding:14px 32px;">📅 Agendar Visita</a>
@@ -46,9 +81,9 @@
 
 <div style="background:var(--green-dark);color:#fff;padding:14px 0;">
   <div class="container" style="display:flex;gap:40px;justify-content:center;flex-wrap:wrap;text-align:center;">
-    <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;">2</div><div style="font-size:12px;opacity:0.8;">Modelos base</div></div>
-    <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;">8</div><div style="font-size:12px;opacity:0.8;">Versiones disponibles</div></div>
-    <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;">Desde $1,456,000</div><div style="font-size:12px;opacity:0.8;">Precio base</div></div>
+    <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;">64</div><div style="font-size:12px;opacity:0.8;">Casas en la privada</div></div>
+    <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;">2</div><div style="font-size:12px;opacity:0.8;">Modelos disponibles</div></div>
+    <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;">Desde $1,456,000</div><div style="font-size:12px;opacity:0.8;">Precio de lista</div></div>
     <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;">10+</div><div style="font-size:12px;opacity:0.8;">Amenidades incluidas</div></div>
   </div>
 </div>
@@ -84,7 +119,25 @@
           <div class="version-row"><span class="version-name">Austera (Estándar 2 rec.)</span><span class="version-price">$1,456,000</span></div>
           <div class="version-row elite-row"><span class="version-name">🏅 Austera Elite (3 rec.)</span><span class="version-price" style="color:var(--orange);">$1,545,000</span></div>
           <div style="display:flex;gap:8px;margin-top:16px;">
-            <a href="catalogo-quetzal.html" class="btn-outline" style="flex:1;justify-content:center;padding:11px;font-size:14px;">Ver catálogo</a>
+            <div class="calc-dropdown">
+              <button class="calc-btn">&#127968; Calcular &#9660;</button>
+              <div class="calc-menu">
+                <div class="calc-menu-header">Selecciona tu versi&oacute;n</div>
+                <a href="calculadora.html?manzana=2&modelo=QUETZAL&version=EQUIPADA">
+                  Equipada Est&aacute;ndar <span class="price">$1,587,000</span>
+                </a>
+                <a href="calculadora.html?manzana=2&modelo=QUETZAL&version=EQUIPADA+ELITE" class="elite">
+                  &#11088; Equipada Elite <span class="price">$1,676,000</span>
+                </a>
+                <a href="calculadora.html?manzana=2&modelo=QUETZAL&version=AUSTERA">
+                  Austera Est&aacute;ndar <span class="price">$1,456,000</span>
+                </a>
+                <a href="calculadora.html?manzana=2&modelo=QUETZAL&version=AUSTERA+ELITE" class="elite">
+                  &#11088; Austera Elite <span class="price">$1,545,000</span>
+                </a>
+              </div>
+            </div>
+          <a href="catalogo-quetzal.html" class="btn-outline" style="flex:1;justify-content:center;padding:11px;font-size:14px;">Ver catálogo</a>
             <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="flex:1;justify-content:center;padding:11px;font-size:14px;">Agendar</a>
           </div>
         </div>
@@ -111,7 +164,25 @@
           <div class="version-row"><span class="version-name">Austera (Estándar 3 rec.)</span><span class="version-price">$1,768,000</span></div>
           <div class="version-row elite-row"><span class="version-name">🏅 Austera Elite (4 rec.)</span><span class="version-price" style="color:var(--orange);">$1,857,000</span></div>
           <div style="display:flex;gap:8px;margin-top:16px;">
-            <a href="catalogo-quetzal-plus.html" class="btn-outline" style="flex:1;justify-content:center;padding:11px;font-size:14px;">Ver catálogo</a>
+            <div class="calc-dropdown">
+              <button class="calc-btn">&#127968; Calcular &#9660;</button>
+              <div class="calc-menu">
+                <div class="calc-menu-header">Selecciona tu versi&oacute;n</div>
+                <a href="calculadora.html?manzana=2&modelo=QUETZAL_PLUS&version=EQUIPADA">
+                  Equipada Est&aacute;ndar <span class="price">$1,943,000</span>
+                </a>
+                <a href="calculadora.html?manzana=2&modelo=QUETZAL_PLUS&version=EQUIPADA+ELITE" class="elite">
+                  &#11088; Equipada Elite <span class="price">$2,032,000</span>
+                </a>
+                <a href="calculadora.html?manzana=2&modelo=QUETZAL_PLUS&version=AUSTERA">
+                  Austera Est&aacute;ndar <span class="price">$1,768,000</span>
+                </a>
+                <a href="calculadora.html?manzana=2&modelo=QUETZAL_PLUS&version=AUSTERA+ELITE" class="elite">
+                  &#11088; Austera Elite <span class="price">$1,857,000</span>
+                </a>
+              </div>
+            </div>
+          <a href="catalogo-quetzal-plus.html" class="btn-outline" style="flex:1;justify-content:center;padding:11px;font-size:14px;">Ver catálogo</a>
             <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="flex:1;justify-content:center;padding:11px;font-size:14px;">Agendar</a>
           </div>
         </div>
@@ -122,13 +193,131 @@
 </section>
 
 <section style="background:#fff;padding:60px 0;">
-  <div class="container">
-    <div style="background:linear-gradient(135deg,#f0faf0,#e8f5e8);border-radius:var(--radius-lg);padding:32px;border:1px solid rgba(46,139,46,0.2);">
-      <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;color:var(--green-dark);margin-bottom:12px;">💡 ¿Equipada o Austera?</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
-        <div><div style="font-weight:700;font-size:14px;margin-bottom:6px;">Versión Equipada</div><div style="font-size:13px;color:var(--gray-600);">Acabados de primera calidad: mármol, granito Blanco Acapulco, porcelanato 60×60, bambú natural y duela.</div></div>
-        <div><div style="font-weight:700;font-size:14px;margin-bottom:6px;">Versión Austera</div><div style="font-size:13px;color:var(--gray-600);">Excelente calidad con materiales estándar seleccionados. Opción más accesible sin sacrificar diseño.</div></div>
+    <!-- Versiones comparison -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+      <!-- Equipada -->
+      <div style="background:#fff;border-radius:var(--radius-lg);border:2px solid var(--green);overflow:hidden;box-shadow:0 4px 20px rgba(46,139,46,0.10);">
+        <div style="background:linear-gradient(135deg,var(--green),#8DC63F);padding:16px 24px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:22px;">🏠</span>
+          <div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:16px;color:#fff;">Versi&oacute;n Equipada</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.85);">Lista para habitar de inmediato</div>
+          </div>
+        </div>
+        <div style="padding:20px 24px;">
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;"><span style="color:var(--green);font-size:16px;line-height:1.3;">&#10003;</span><span><strong>Cocina integral</strong> con acabados de granito</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;"><span style="color:var(--green);font-size:16px;line-height:1.3;">&#10003;</span><span><strong>Cl&oacute;sets</strong> en rec&aacute;maras</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;"><span style="color:var(--green);font-size:16px;line-height:1.3;">&#10003;</span><span><strong>Persianas</strong> en todas las ventanas</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;"><span style="color:var(--green);font-size:16px;line-height:1.3;">&#10003;</span><span><strong>Muebles de ba&ntilde;o</strong> completos</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;"><span style="color:var(--green);font-size:16px;line-height:1.3;">&#10003;</span><span><strong>Port&oacute;n el&eacute;ctrico</strong></span></li>
+          </ul>
+        </div>
       </div>
+
+      <!-- Austera -->
+      <div style="background:#fff;border-radius:var(--radius-lg);border:2px solid #c8d0da;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+        <div style="background:linear-gradient(135deg,#5a6472,#8a9aaa);padding:16px 24px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:22px;">&#128273;</span>
+          <div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:16px;color:#fff;">Versi&oacute;n Austera</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.85);">Personaliza a tu gusto</div>
+          </div>
+        </div>
+        <div style="padding:20px 24px;">
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;"><span style="color:#5a6472;font-size:16px;line-height:1.3;">&#10003;</span><span><strong>Tarja</strong> en &aacute;rea de cocina</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;"><span style="color:#5a6472;font-size:16px;line-height:1.3;">&#10003;</span><span><strong>Ventiladores</strong> instalados</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#888;font-style:italic;"><span style="font-size:16px;line-height:1.3;">&#9675;</span><span>Personaliza tus propios acabados</span></li>
+            <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#888;font-style:italic;"><span style="font-size:16px;line-height:1.3;">&#9675;</span><span>Presupuesto m&aacute;s accesible</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+</section>
+
+
+<!-- RECORRIDOS VIRTUALES -->
+<section style="background:#0d1117;padding:70px 0;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="section-tag" style="background:rgba(255,255,255,0.1);color:#e0e0e0;">Experiencia inmersiva</div>
+      <h2 class="section-title" style="color:#fff;">Recorridos <span style="color:var(--green-light);">Virtuales</span></h2>
+      <p style="color:rgba(255,255,255,0.6);margin-top:8px;">Explora cada modelo desde donde estés. Recorrido 360° con tecnología Matterport.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
+
+      <!-- Quetzal -->
+      <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);">
+        <div style="position:relative;padding-top:60%;background:#111;">
+          <iframe src="https://my.matterport.com/show/?m=gmCEbVbLvKr"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+            allowfullscreen allow="xr-spatial-tracking"
+            title="Recorrido Virtual Modelo Quetzal"></iframe>
+        </div>
+        <div style="background:#161b22;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">Modelo Quetzal</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);">80–81 m² construcción · 2 recámaras</div>
+          </div>
+          <a href="https://my.matterport.com/show/?m=gmCEbVbLvKr" target="_blank"
+            style="background:var(--green-dark);color:#fff;font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;padding:8px 16px;border-radius:8px;text-decoration:none;white-space:nowrap;">⛶ Pantalla completa</a>
+        </div>
+      </div>
+
+      <!-- Quetzal Plus -->
+      <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);">
+        <div style="position:relative;padding-top:60%;background:#111;">
+          <iframe src="https://my.matterport.com/show/?m=Z7yHuZ1yPye"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+            allowfullscreen allow="xr-spatial-tracking"
+            title="Recorrido Virtual Modelo Quetzal Plus"></iframe>
+        </div>
+        <div style="background:#161b22;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">Modelo Quetzal Plus</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);">110–111 m² construcción · 3 recámaras</div>
+          </div>
+          <a href="https://my.matterport.com/show/?m=Z7yHuZ1yPye" target="_blank"
+            style="background:var(--green-dark);color:#fff;font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;padding:8px 16px;border-radius:8px;text-decoration:none;white-space:nowrap;">⛶ Pantalla completa</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CROQUIS MANZANA 2 -->
+<section style="background:var(--cream);padding:60px 0;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="section-tag">Distribución de la Privada</div>
+      <h2 class="section-title">Croquis <span>Manzana 2</span></h2>
+      <p style="color:var(--gray-500);margin-top:8px;">Vista aérea del conjunto habitacional. 64 casas en 2 modelos.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 220px;gap:32px;align-items:start;">
+      <div style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--gray-200);">
+        <img src="Planos/CONDOMINIO 2 TUCAN.png" alt="Croquis Manzana 2 Tucán" style="width:100%;height:auto;display:block;">
+      </div>
+      <div style="background:#fff;border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-md);border:1px solid var(--gray-200);">
+        <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:var(--dark);margin-bottom:16px;">Leyenda de Modelos</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:20px;height:20px;border-radius:4px;background:#F4A460;flex-shrink:0;"></div><div style="font-size:13px;color:var(--gray-600);">Modelo Quetzal</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:20px;height:20px;border-radius:4px;background:#87CEEB;flex-shrink:0;"></div><div style="font-size:13px;color:var(--gray-600);">Modelo Quetzal Plus</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:20px;height:20px;border-radius:4px;background:#F5F5DC;border:1px dashed #ccc;flex-shrink:0;"></div><div style="font-size:13px;color:var(--gray-600);">Estacionamiento</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:20px;height:20px;border-radius:4px;background:#90EE90;flex-shrink:0;"></div><div style="font-size:13px;color:var(--gray-600);">Áreas verdes</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:20px;height:20px;border-radius:50%;background:#87CEEB;flex-shrink:0;border:2px solid #4682B4;"></div><div style="font-size:13px;color:var(--gray-600);">Alberca</div></div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--gray-200);">
+          <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:var(--dark);margin-bottom:4px;">Total: 64 casas</div>
+          <div style="font-size:12px;color:var(--gray-500);">Privada Tucán · Manzana 2</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px;">
+      <a href="propiedades.html" class="btn-outline" style="padding:12px 28px;font-size:14px;">Ver disponibilidad →</a>
     </div>
   </div>
 </section>

@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Crédito — Residencial Los Quetzales</title>
+<meta name="description" content="Calcula tu esquema de crédito para adquirir tu casa en Residencial Los Quetzales. INFONAVIT, FOVISSSTE, Bancario y más.">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="precios.js"></script>
+<style>
+body { background: #f0f8ef; }
+.calc-hero {
+  background: linear-gradient(135deg, #1A6B1A 0%, #2E8B2E 60%, #8DC63F 100%);
+  color: #fff; padding: 52px 40px 40px; text-align: center;
+}
+.calc-hero h1 { font-family: 'Poppins',sans-serif; font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+.calc-hero p { font-size: 1rem; opacity: .85; }
+.calc-wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; }
+.step-card {
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(46,139,46,.10);
+  padding: 28px 32px; margin-bottom: 20px;
+  border-left: 4px solid #2E8B2E;
+  animation: fadeUp .3s ease;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+.step-label {
+  font-family: 'Poppins',sans-serif; font-size: .72rem; font-weight: 700;
+  color: #2E8B2E; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px;
+}
+.fg { display: flex; flex-direction: column; gap: 6px; }
+.fg label { font-family: 'Poppins',sans-serif; font-size: .82rem; font-weight: 600; color: #444; }
+.fg select, .fg input {
+  padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px;
+  font-size: .95rem; font-family: 'Lato',sans-serif; outline: none;
+  background: #fafafa; transition: .2s;
+}
+.fg select:focus, .fg input:focus { border-color: #2E8B2E; background: #fff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:600px){ .grid2 { grid-template-columns: 1fr; } }
+.price-box {
+  background: linear-gradient(135deg, #f0f8ef, #e8f5e2);
+  border: 1.5px solid #8DC63F; border-radius: 12px;
+  padding: 16px 20px; margin-top: 18px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.price-box .pb-lbl { font-size: .8rem; color: #555; font-family:'Poppins',sans-serif; }
+.price-box .pb-val { font-size: 1.5rem; font-weight: 800; color: #1A6B1A; font-family:'Poppins',sans-serif; }
+.tipo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+@media(max-width:560px){ .tipo-grid { grid-template-columns: 1fr 1fr; } }
+.tipo-btn {
+  padding: 13px 8px; border: 2px solid #e0e0e0; border-radius: 10px;
+  background: #fafafa; font-family:'Poppins',sans-serif; font-size: .78rem;
+  font-weight: 600; cursor: pointer; transition: .2s; color: #666; text-align: center;
+}
+.tipo-btn:hover { border-color: #2E8B2E; color: #2E8B2E; }
+.tipo-btn.active { border-color: #2E8B2E; background: #f0f8ef; color: #1A6B1A; }
+.extras-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-radius: 8px; background: #fafafa;
+  border: 1px solid #e8e8e8; gap: 12px;
+}
+.extras-item label { font-size: .9rem; color: #444; font-family:'Poppins',sans-serif; font-weight: 500; }
+.extras-item input[type=checkbox] { width: 18px; height: 18px; cursor: pointer; accent-color: #2E8B2E; }
+.extras-item input[type=number] { width: 130px; padding: 6px 10px; border: 1.5px solid #ddd; border-radius: 6px; font-size:.9rem; }
+.res-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px; border-radius: 8px; background: #f7f7f7; font-size: .9rem;
+}
+.res-row + .res-row { margin-top: 6px; }
+.res-row.bold { background: #eaf5ea; font-weight: 700; color: #1A6B1A; }
+.dif-box {
+  margin-top: 18px; border-radius: 14px; padding: 20px 24px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.dif-box.ok { background: rgba(22,163,74,.08); border: 2px solid rgba(22,163,74,.4); }
+.dif-box.nok { background: rgba(220,38,38,.07); border: 2px solid rgba(220,38,38,.35); }
+.dif-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #666; }
+.dif-badge { font-size: .9rem; font-weight: 700; margin-top: 4px; }
+.ok .dif-badge, .ok .dif-num { color: #16a34a; }
+.nok .dif-badge, .nok .dif-num { color: #dc2626; }
+.dif-num { font-family:'Poppins',sans-serif; font-size: 2.2rem; font-weight: 800; }
+.btn-pdf {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg,#2E8B2E,#8DC63F);
+  color: #fff; font-family:'Poppins',sans-serif; font-weight: 700; font-size: .95rem;
+  padding: 14px 32px; border-radius: 10px; border: none; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(46,139,46,.3); transition: .2s; margin-top: 18px;
+}
+.btn-pdf:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(46,139,46,.4); }
+.btn-reset {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: #888; font-family:'Poppins',sans-serif;
+  font-size:.85rem; font-weight:600; padding:10px 20px; border-radius:8px;
+  border:1.5px solid #ddd; cursor:pointer; margin-top:18px; margin-left:12px; transition:.2s;
+}
+.btn-reset:hover { border-color:#2E8B2E; color:#2E8B2E; }
+.hidden { display: none !important; }
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border-bottom: 3px solid var(--orange);
+  padding: 12px 20px 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--dark);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-200);
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a.active { color: var(--green); }
+@media(min-width: 769px) { .mobile-menu { display: none !important; } .hamburger { display: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-logo">
+    <img src="Material/Logo 1.1 sin fondo.png" alt="Residencial Los Quetzales">
+  </div>
+  <div class="navbar-links">
+    <a href="index.html">Inicio</a>
+    <a href="tucan.html">Tucán</a>
+    <a href="ave-de-paraiso.html">Ave de Paraíso</a>
+    <a href="propiedades.html">Disponibilidad</a>
+    <a href="calculadora.html" class="active">Calculadora</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+  <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary">📅 Agendar Visita</a>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Inicio</a>
+  <a href="tucan.html">Tucán</a>
+  <a href="ave-de-paraiso.html">Ave de Paraíso</a>
+  <a href="propiedades.html">Disponibilidad</a>
+  <a href="calculadora.html" class="active">Calculadora</a>
+  <a href="contacto.html">Contacto</a>
+  <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="margin:12px 16px;">📅 Agendar Visita</a>
+</div>
+
+<!-- HERO -->
+<section class="calc-hero">
+  <h1>🏦 Calculadora de Crédito</h1>
+  <p>Simula tu esquema financiero personalizado · INFONAVIT · FOVISSSTE · Bancario · Contado</p>
+</section>
+
+<!-- MAIN -->
+<main class="calc-wrap" id="mainWrap">
+
+<!-- PASO 1: MANZANA + MODELO -->
+<div class="step-card" id="step1">
+  <div class="step-label">1 · Selecciona tu Propiedad</div>
+  <div class="grid2">
+    <div class="fg">
+      <label for="selManzana">Manzana / Privada</label>
+      <select id="selManzana" onchange="onManzana()">
+        <option value="">— Selecciona —</option>
+        <option value="Manzana 2">Manzana 2 — Tucán</option>
+        <option value="Manzana 3">Manzana 3 — Ave del Paraíso</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label for="selModelo">Modelo</label>
+      <select id="selModelo" onchange="onModelo()" disabled>
+        <option value="">— Primero elige Manzana —</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- PASO 2: VERSION + PRECIO -->
+<div class="step-card hidden" id="step2">
+  <div class="step-label">2 · Versión y Precio Base</div>
+  <div class="grid2">
+    <div class="fg">
+      <label for="selVersion">Versión de Acabados</label>
+      <select id="selVersion" onchange="onVersion()">
+        <option value="">— Selecciona versión —</option>
+      </select>
+    </div>
+    </div>
+  </div>
+  <div class="price-box hidden" id="priceBox">
+    <div>
+      <div class="pb-lbl">Precio Base</div>
+      <div class="pb-val" id="lblPrecioBase">$0</div>
+    </div>
+    <div>
+      <div class="pb-lbl">Valor Avalúo</div>
+      <div class="pb-val" id="lblAvaluo" style="font-size:1.1rem;color:#2E8B2E;">$0</div>
+    </div>
+    
+  </div>
+</div>
+
+<!-- PASO 3: TIPO DE CREDITO -->
+<div class="step-card hidden" id="step3">
+  <div class="step-label">3 · Tipo de Crédito</div>
+  <div class="tipo-grid">
+    <button class="tipo-btn" onclick="selTipo('INFONAVIT')">INFONAVIT</button>
+    <button class="tipo-btn" onclick="selTipo('FOVISSSTE')">FOVISSSTE</button>
+    <button class="tipo-btn" onclick="selTipo('CFE_CONTADO')">💵 Contado / CFE</button>
+    <button class="tipo-btn" onclick="selTipo('BANCARIO')">🏦 Crédito Bancario</button>
+    <button class="tipo-btn" onclick="selTipo('COFINAVIT')">COFINAVIT</button>
+    <button class="tipo-btn" onclick="selTipo('FOVISSSTE_INFONAVIT')">FOVISSSTE + INFONAVIT</button>
+  </div>
+</div>
+
+<!-- PASO 4: CAMPOS DEL CREDITO + RESULTADO -->
+<div class="step-card hidden" id="step4">
+  <div class="step-label">4 · Datos del Crédito y Resultado</div>
+  <div class="grid2" id="creditFields">
+    <div class="fg hidden" id="fldGN">
+      <label for="inGN">Gastos Notariales <span style="font-size:.72rem;color:#E87722;font-weight:400;">(aproximados)</span></label>
+      <input type="number" id="inGN" placeholder="0" min="0" onchange="calcular()">
+      <small style="color:#888;font-size:.75rem;">Estimación automática — puede variar según notaría</small>
+    </div>
+    <div class="fg hidden" id="fldDisponible">
+      <label for="inDisponible">Monto disponible del cliente</label>
+      <input type="number" id="inDisponible" placeholder="0" min="0" onchange="calcular()">
+    </div>
+    <div class="fg hidden" id="fldCredito">
+      <label for="inCredito" id="lblCredito">Crédito</label>
+      <input type="number" id="inCredito" placeholder="0" min="0" onchange="calcular()">
+    </div>
+    <div class="fg hidden" id="fldSubcuenta">
+      <label for="inSubcuenta">Subcuenta de Vivienda</label>
+      <input type="number" id="inSubcuenta" placeholder="0" min="0" onchange="calcular()">
+    </div>
+    <div class="fg hidden" id="fldBanco">
+      <label for="inBanco">Crédito Bancario</label>
+      <input type="number" id="inBanco" placeholder="0" min="0" onchange="calcular()">
+    </div>
+    <div class="fg hidden" id="fldFoviss">
+      <label for="inFoviss">Crédito FOVISSSTE</label>
+      <input type="number" id="inFoviss" placeholder="0" min="0" onchange="calcular()">
+    </div>
+    <div class="fg" id="fldApartado">
+      <label for="inApartado">Apartado</label>
+      <input type="number" id="inApartado" placeholder="0" min="0" onchange="calcular()">
+      <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">
+        <button onclick="setApartado('1pct')" style="font-size:.7rem;padding:3px 10px;border-radius:5px;border:1px solid #ddd;cursor:pointer;background:#f5f5f5;">1%</button>
+        <button onclick="setApartado('10pct')" style="font-size:.7rem;padding:3px 10px;border-radius:5px;border:1px solid #ddd;cursor:pointer;background:#f5f5f5;">10%</button>
+        <button onclick="setApartado('fixed')" style="font-size:.7rem;padding:3px 10px;border-radius:5px;border:1px solid #ddd;cursor:pointer;background:#f5f5f5;">$20,000</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="resultBox" class="hidden" style="margin-top:24px;">
+    <div style="font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:700;color:#2E8B2E;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;">Desglose Financiero</div>
+    <div id="desglose"></div>
+    <div class="dif-box" id="difBox">
+      <div>
+        <div class="dif-title">Diferencia Final</div>
+        <div class="dif-badge" id="difBadge"></div>
+      </div>
+      <div class="dif-num" id="difNum"></div>
+    </div>
+    <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+      <button class="btn-pdf" onclick="generarPDF()">📄 Descargar Cotización PDF</button>
+      <button class="btn-reset" onclick="resetCalc()">↺ Nueva Consulta</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer style="background:#1A1A1A;color:#aaa;text-align:center;padding:28px;font-size:.85rem;font-family:'Lato',sans-serif;">
+  <p>© 2026 Residencial Los Quetzales · <a href="index.html" style="color:#8DC63F;">Inicio</a></p>
+</footer>
+
+<script>
+// ── Estado global ──────────────────────────────────────────
+let manzana='', modelo='', version='', tipo='';
+let precioBase=0, avaluo=0;
+
+// ── Helpers ────────────────────────────────────────────────
+const fmt = n => '$' + Math.round(n).toLocaleString('es-MX');
+const val = id => parseFloat(document.getElementById(id).value)||0;
+const show = id => document.getElementById(id).classList.remove('hidden');
+const hide = id => document.getElementById(id).classList.add('hidden');
+
+// ── Paso 1: Manzana ────────────────────────────────────────
+function onManzana(){
+  manzana = document.getElementById('selManzana').value;
+  modelo=''; version=''; tipo='';
+  const selM = document.getElementById('selModelo');
+  selM.innerHTML='<option value="">— Selecciona modelo —</option>';
+  selM.disabled = !manzana;
+  hide('step2'); hide('step3'); hide('step4');
+  if(!manzana) return;
+  const modelos = [...new Set(PRECIOS[manzana].map(r=>r.modelo))];
+  modelos.forEach(m=>{ const o=document.createElement('option'); o.value=m; o.textContent=m; selM.appendChild(o); });
+  selM.disabled=false;
+}
+
+// ── Paso 1: Modelo → Paso 2 ────────────────────────────────
+function onModelo(){
+  modelo = document.getElementById('selModelo').value;
+  version=''; tipo='';
+  hide('step2'); hide('step3'); hide('step4');
+  if(!modelo) return;
+  const selV=document.getElementById('selVersion');
+  selV.innerHTML='<option value="">— Selecciona versión —</option>';
+  const rows = PRECIOS[manzana].filter(r=>r.modelo===modelo);
+  rows.forEach(r=>{ const o=document.createElement('option'); o.value=r.version; o.textContent=r.version; selV.appendChild(o); });
+  show('step2');
+  hide('priceBox');
+}
+
+// ── Paso 2: Versión ────────────────────────────────────────
+function onVersion(){
+  version = document.getElementById('selVersion').value;
+  tipo='';
+  hide('step3'); hide('step4'); hide('resultBox');
+  if(!version) return;
+  const row = PRECIOS[manzana].find(r=>r.modelo===modelo && r.version===version);
+  if(!row) return;
+  precioBase=row.precio; avaluo=row.avaluo;
+  document.getElementById('lblPrecioBase').textContent=fmt(precioBase);
+  document.getElementById('lblAvaluo').textContent=fmt(avaluo);
+  
+  show('priceBox');
+  show('step3');
+}
+
+function getExtras(){ return 0; }
+
+// ── Paso 3: Tipo de crédito ────────────────────────────────
+function selTipo(t){
+  tipo=t;
+  document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderCreditFields();
+  show('step4');
+}
+
+function renderCreditFields(){
+  const allFlds=['fldGN','fldDisponible','fldCredito','fldSubcuenta','fldBanco','fldFoviss'];
+  allFlds.forEach(hide);
+  
+  // Gastos notariales: auto-calc
+  let gnPct=0;
+  if(tipo==='INFONAVIT'||tipo==='COFINAVIT'||tipo==='FOVISSSTE_INFONAVIT') gnPct=.05;
+  else if(tipo==='FOVISSSTE') gnPct=.055;
+  else if(tipo==='BANCARIO') gnPct=.06;
+  else if(tipo==='CFE_CONTADO') gnPct=.07;
+  if(gnPct>0){
+    document.getElementById('inGN').value=Math.round(avaluo*gnPct);
+    show('fldGN');
+  }
+  if(tipo==='INFONAVIT'){
+    document.getElementById('lblCredito').textContent='Crédito INFONAVIT';
+    show('fldCredito'); show('fldSubcuenta'); show('fldDisponible');
+  } else if(tipo==='FOVISSSTE'){
+    document.getElementById('lblCredito').textContent='Crédito FOVISSSTE';
+    show('fldCredito'); show('fldSubcuenta'); show('fldDisponible');
+  } else if(tipo==='CFE_CONTADO'){
+    show('fldDisponible');
+  } else if(tipo==='BANCARIO'){
+    show('fldBanco'); show('fldDisponible');
+  } else if(tipo==='COFINAVIT'){
+    document.getElementById('lblCredito').textContent='Crédito INFONAVIT (COFINAVIT)';
+    show('fldCredito'); show('fldSubcuenta'); show('fldDisponible');
+  } else if(tipo==='FOVISSSTE_INFONAVIT'){
+    document.getElementById('lblCredito').textContent='Crédito INFONAVIT';
+    show('fldCredito'); show('fldFoviss'); show('fldSubcuenta'); show('fldDisponible');
+  }
+  calcular();
+}
+
+// ── Apartado shortcuts ─────────────────────────────────────
+function setApartado(mode){
+  const total=precioBase+getExtras();
+  if(mode==='1pct') document.getElementById('inApartado').value=Math.round(total*.01);
+  else if(mode==='10pct') document.getElementById('inApartado').value=Math.round(total*.10);
+  else document.getElementById('inApartado').value=20000;
+  calcular();
+}
+
+// ── Cálculo principal ──────────────────────────────────────
+function calcular(){
+  if(!tipo||!version) return;
+  
+  const extras=getExtras();
+  const total=precioBase+extras;
+  const descuento=0;
+  const gn=val('inGN');
+  const disponible=val('inDisponible');
+  const credito=val('inCredito');
+  const subcuenta=val('inSubcuenta');
+  const banco=val('inBanco');
+  const foviss=val('inFoviss');
+  const apartado=val('inApartado');
+  const costo=total-descuento+gn;
+  const recursos=disponible+credito+subcuenta+banco+foviss+apartado;
+  const diferencia=costo-recursos;
+  // Desglose
+  const items=[];
+  items.push({l:'Precio Base',v:precioBase});
+  if(extras>0) items.push({l:'Extras',v:extras});
+  
+  if(gn>0) items.push({l:'Gastos Notariales',v:gn});
+  items.push({l:'COSTO TOTAL',v:costo,bold:true});
+  if(disponible>0) items.push({l:'Disponible cliente',v:-disponible});
+  if(credito>0) items.push({l:'Crédito',v:-credito});
+  if(subcuenta>0) items.push({l:'Subcuenta Vivienda',v:-subcuenta});
+  if(banco>0) items.push({l:'Crédito Bancario',v:-banco});
+  if(foviss>0) items.push({l:'Crédito FOVISSSTE',v:-foviss});
+  if(apartado>0) items.push({l:'Apartado',v:-apartado});
+  const des=document.getElementById('desglose');
+  des.innerHTML=items.map(it=>`<div class="res-row ${it.bold?'bold':''}"><span>${it.l}</span><span>${it.v<0?'−':''}${fmt(Math.abs(it.v))}</span></div>`).join('');
+  const db=document.getElementById('difBox');
+  db.className='dif-box '+(diferencia<=0?'ok':'nok');
+  document.getElementById('difNum').textContent=(diferencia<=0?'+':'−')+fmt(Math.abs(diferencia));
+  document.getElementById('difBadge').textContent=diferencia<=0?'✓ Saldo a favor del cliente':'⚠ Monto a cubrir con recursos propios';
+  show('resultBox');
+  // guardar para PDF
+  window._calcData={manzana,modelo,version,tipo,precioBase,avaluo,extras,descuento,gn,disponible,credito,subcuenta,banco,foviss,apartado,costo,recursos,diferencia,items};
+}
+
+// ── PDF ────────────────────────────────────────────────────
+function generarPDF(){
+  const {jsPDF}=window.jspdf;
+  const d=window._calcData; if(!d) return;
+  const doc=new jsPDF();
+  // Encabezado verde
+  doc.setFillColor(46,139,46);
+  doc.rect(0,0,210,32,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(16);
+  doc.text('RESIDENCIAL LOS QUETZALES',14,14);
+  doc.setFontSize(10);
+  doc.setFont('helvetica','normal');
+  doc.text('Calculadora de Crédito — Cotización',14,22);
+  doc.text(new Date().toLocaleDateString('es-MX'),140,22);
+  // Datos
+  doc.setTextColor(30,30,30);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(11);
+  doc.text('PROPIEDAD',14,44);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(10);
+  doc.text(`${d.manzana} · ${d.modelo} · ${d.version}`,14,52);
+  doc.text(`Tipo de Crédito: ${d.tipo.replace('_',' ')}`,14,60);
+  // Tabla
+  let y=74;
+  doc.setFillColor(46,139,46);
+  doc.rect(14,y-6,182,8,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.text('Concepto',16,y);
+  doc.text('Monto',150,y);
+  doc.setTextColor(30,30,30);
+  doc.setFont('helvetica','normal');
+  d.items.forEach(it=>{
+    y+=10;
+    if(it.bold){ doc.setFont('helvetica','bold'); doc.setFillColor(240,248,239); doc.rect(14,y-6,182,8,'F'); }
+    else doc.setFont('helvetica','normal');
+    doc.setTextColor(30,30,30);
+    doc.text(it.l,16,y);
+    doc.text((it.v<0?'− ':'')+fmt(Math.abs(it.v)),150,y);
+  });
+  // Diferencia
+  y+=16;
+  const ok=d.diferencia<=0;
+  doc.setFillColor(ok?22:220,ok?163:38,ok?74:38);
+  doc.rect(14,y-6,182,14,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(11);
+  doc.text(ok?'✓ SALDO A FAVOR':'⚠ MONTO A CUBRIR',16,y+2);
+  doc.text((ok?'+ ':' ')+fmt(Math.abs(d.diferencia)),140,y+2);
+  // Pie
+  doc.setTextColor(140,140,140);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.setDrawColor(200,200,200);
+  doc.line(14,276,196,276);
+  doc.setTextColor(100,100,100);
+  doc.setFont('helvetica','italic');
+  doc.setFontSize(7.5);
+  doc.text('Nota: Esta cotizacion es de caracter informativo y esta sujeta a cambios sin previo aviso conforme a la',14,281);
+  doc.text('validacion de capacidad de credito y disponibilidad de vivienda. Los gastos notariales y de titulacion son aproximados.',14,287);
+  doc.save(`Cotizacion_Quetzales_${d.modelo.replace(/ /g,'_')}.pdf`);
+}
+
+// ── Reset ──────────────────────────────────────────────────
+function resetCalc(){
+  manzana=''; modelo=''; version=''; tipo=''; precioBase=0; avaluo=0;
+  document.getElementById('selManzana').value='';
+  document.getElementById('selModelo').value='';
+  document.getElementById('selModelo').disabled=true;
+  hide('step2'); hide('step3'); hide('step4'); hide('resultBox');
+}
+
+// ── Navbar mobile ──────────────────────────────────────────
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  m.classList.toggle('open');
+}
+
+// ── URL params pre-selección ───────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const p=new URLSearchParams(location.search);
+  const mz=p.get('manzana'), md=p.get('modelo'), vr=p.get('version');
+  if(mz){
+    const key=mz==='2'?'Manzana 2':'Manzana 3';
+    document.getElementById('selManzana').value=key;
+    onManzana();
+    if(md){
+      const found=[...document.getElementById('selModelo').options].find(o=>o.value.includes(md.replace(/_/g,' ')));
+      if(found){ document.getElementById('selModelo').value=found.value; onModelo(); }
+      if(vr){
+        const selV=document.getElementById('selVersion');
+        const fv=[...selV.options].find(o=>o.value===vr.replace(/_/g,' '));
+        if(fv){ selV.value=fv.value; onVersion(); }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
