@@ -33,7 +33,7 @@
 </head>
 <body>
 <nav class="navbar">
-  <div class="navbar-logo"><img src="Material/Logo 1.1 sin fondo.png" alt="Residencial Los Quetzales"></div>
+  <div class="navbar-logo"><a href="index.html"><img src="Material/Logo 1.1 sin fondo.png" alt="Residencial Los Quetzales"></a></div>
   <div class="navbar-links">
     <a href="index.html">Inicio</a>
     <a href="tucan.html">Tucán</a>
@@ -42,6 +42,9 @@
     <a href="calculadora.html">Calculadora</a><a href="contacto.html">Contacto</a>
   </div>
   <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary">📅 Agendar Visita</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -410,6 +413,23 @@ initSupabase();
 const styleRT = document.createElement('style');
 styleRT.textContent = '@keyframes pulse-live{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.4);}}';
 document.head.appendChild(styleRT);
+</script>
+
+<script>
+function toggleMenu() {
+  const links = document.querySelector('.navbar-links');
+  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+  links.style.flexDirection = 'column';
+  links.style.position = 'absolute';
+  links.style.top = '72px';
+  links.style.left = '0';
+  links.style.right = '0';
+  links.style.background = '#fff';
+  links.style.padding = '20px';
+  links.style.borderBottom = '2px solid var(--orange)';
+  links.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)';
+  links.style.zIndex = '999';
+}
 </script>
 </body>
 </html>

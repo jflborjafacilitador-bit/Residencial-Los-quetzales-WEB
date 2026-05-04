@@ -393,5 +393,20 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 });
 </script>
+<script>
+function toggleMenu() {
+  const links = document.querySelector('.navbar-links');
+  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+  links.style.flexDirection = 'column';
+  links.style.position = 'absolute';
+  links.style.top = '72px';
+  links.style.left = '0';
+  links.style.right = '0';
+  links.style.background = '#fff';
+  links.style.padding = '20px';
+  links.style.borderBottom = '2px solid var(--orange)';
+  links.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)';
+}
+</script>
 </body>
 </html>
