@@ -709,6 +709,8 @@ section { padding: 80px 0; }
   .hamburger { display: flex; }
   .grid-3 { grid-template-columns: 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
+  .grid-specs { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .grid-elite { grid-template-columns: 1fr !important; gap: 24px !important; }
   .footer-grid { grid-template-columns: 1fr; gap: 28px; }
   .hero h1 { font-size: 36px; }
   .hero-stats { gap: 24px; flex-wrap: wrap; }
