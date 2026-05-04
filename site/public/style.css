@@ -716,4 +716,20 @@ section { padding: 80px 0; }
   .hero-stats { gap: 24px; flex-wrap: wrap; }
   .folleto-banner { flex-direction: column; text-align: center; }
   .filters { gap: 12px; }
+  
+  /* Nuevas clases responsivas para grillas específicas */
+  .grid-amenidades { grid-template-columns: repeat(3, 1fr) !important; }
+  .grid-2-custom, .grid-2-versiones, .grid-croquis, .grid-mapa, .grid-contacto { grid-template-columns: 1fr !important; gap: 24px !important; }
 }
+
+@media (max-width: 600px) {
+  .grid-amenidades { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Clases base para grillas específicas */
+.grid-amenidades { display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
+.grid-2-custom { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+.grid-2-versiones { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.grid-croquis { display:grid; grid-template-columns:1fr 220px; gap:32px; align-items:start; }
+.grid-mapa { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+.grid-contacto { display:grid; grid-template-columns:1fr 1.3fr; gap:56px; align-items:start; }
