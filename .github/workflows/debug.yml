@@ -1,0 +1,22 @@
+name: Debug SSH
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run SSH commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          port: ${{ secrets.HOSTINGER_PORT }}
+          username: ${{ secrets.HOSTINGER_USERNAME }}
+          password: ${{ secrets.HOSTINGER_PASSWORD }}
+          script: |
+            pwd
+            ls -la
+            ls -la domains/residenciallosquetzales.com/public_html || true
+            find . -name "inventario.js"
