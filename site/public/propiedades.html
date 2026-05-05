@@ -328,22 +328,39 @@ function renderCroquis(mza) {
     </div>`).join('');
 
   const stats = liveData.filter(e => e.mza === mza);
-  const disp = stats.filter(e => e.estatus === 'DISPONIBLE').length;
+  const dispList = stats.filter(e => e.estatus === 'DISPONIBLE').sort((a, b) => parseInt(a.casa) - parseInt(b.casa));
+  const disp = dispList.length;
   const noDisp = stats.filter(e => e.estatus === 'EN_PROCESO').length;
+
+  let casasTags = '';
+  if (disp > 0) {
+    casasTags = `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;max-height:120px;overflow-y:auto;padding-right:5px;">` + 
+      dispList.map(e => `<span style="background:#e6f4ea;color:#1e4620;border:1px solid #cce8d6;padding:4px 8px;border-radius:6px;font-weight:700;font-size:12px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">Casa ${e.casa}</span>`).join('') +
+      `</div>`;
+  } else {
+    casasTags = `<div style="font-size:13px;color:var(--gray-500);margin-top:10px;font-style:italic;">No hay unidades disponibles en esta manzana.</div>`;
+  }
 
   document.getElementById('croquis-content').innerHTML = `
     <div class="croquis-wrap" onclick="this.classList.toggle('zoomed')" style="border:2px solid ${cfg.color}20;">
       <img src="${cfg.plano}" alt="Croquis Manzana ${mza} ${cfg.nombre}">
     </div>
-    <div style="background:#fff;border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-md);border:1px solid var(--gray-200);">
+    <div style="background:#fff;border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-md);border:1px solid var(--gray-200);display:flex;flex-direction:column;">
       <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:var(--dark);margin-bottom:4px;">Manzana ${mza}</div>
-      <div style="display:inline-block;background:${cfg.color};color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;font-family:'Poppins',sans-serif;margin-bottom:16px;">${cfg.badge}</div>
+      <div style="display:inline-block;background:${cfg.color};color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;font-family:'Poppins',sans-serif;margin-bottom:16px;align-self:flex-start;">${cfg.badge}</div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">${leyendaHTML}</div>
+      
       <div style="padding-top:14px;border-top:1px solid var(--gray-200);">
-        <div style="font-size:12px;color:var(--gray-500);margin-bottom:6px;">Inventario actual:</div>
+        <div style="font-size:12px;color:var(--gray-500);margin-bottom:6px;">Resumen:</div>
         ${disp > 0 ? `<div style="font-size:13px;font-weight:700;color:var(--green-dark);">✅ ${disp} disponibles</div>` : ''}
         ${noDisp > 0 ? `<div style="font-size:13px;font-weight:700;color:#b33000;">📋 ${noDisp} en proceso</div>` : ''}
-        <div style="font-size:12px;color:var(--gray-500);margin-top:8px;">Total: ${stats.length} unidades listadas</div>
+        <div style="font-size:12px;color:var(--gray-500);margin-top:4px;">Total: ${stats.length} unidades listadas</div>
+      </div>
+
+      <div style="padding-top:14px;margin-top:14px;border-top:1px dashed var(--gray-200);">
+        <div style="font-size:13px;font-weight:700;color:var(--dark);">🏠 Ubicaciones Disponibles:</div>
+        ${casasTags}
+        <div style="font-size:11px;color:var(--gray-500);margin-top:12px;line-height:1.4;">Para ver metros, modelo y precios ve a la pestaña <b>📋 Lista de unidades</b> o consulta a tu asesor.</div>
       </div>
     </div>
   `;
