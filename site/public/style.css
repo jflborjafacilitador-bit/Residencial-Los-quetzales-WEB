@@ -736,3 +736,107 @@ section { padding: 80px 0; }
 .grid-croquis { display:grid; grid-template-columns:1fr 220px; gap:32px; align-items:start; }
 .grid-mapa { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
 .grid-contacto { display:grid; grid-template-columns:1fr 1.3fr; gap:56px; align-items:start; }
+
+/* ─── URGENCIA E INVENTARIO ─── */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(232, 74, 16, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(232, 74, 16, 0.85);
+    transform: scale(1.03);
+  }
+}
+
+@keyframes border-pulse {
+  0%, 100% {
+    border-color: rgba(232, 74, 16, 0.4);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  50% {
+    border-color: rgba(232, 74, 16, 1);
+    box-shadow: 0 8px 32px rgba(232, 74, 16, 0.15);
+  }
+}
+
+.badge-danger-glow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #e84a10;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulse-glow 2s infinite;
+  box-shadow: 0 0 15px rgba(232,74,16,0.6);
+}
+
+.card-urgencia-hero {
+  background: rgba(10, 31, 10, 0.85);
+  border: 1.5px solid rgba(232, 74, 16, 0.5);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 28px;
+  max-width: 580px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  animation: border-pulse 3s infinite;
+  text-align: left;
+}
+
+.card-urgencia-hero-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.card-urgencia-hero-tag {
+  background: #e84a10;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-urgencia-hero-subtitle {
+  color: #ff9d76;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+}
+
+.card-urgencia-hero-text {
+  color: #f1f1f1;
+  font-size: 14.5px;
+  line-height: 1.45;
+  margin: 0 0 10px 0;
+  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+}
+
+.card-urgencia-hero-link {
+  color: #ff9d76;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+
+.card-urgencia-hero-link:hover {
+  color: #fff;
+}
+
