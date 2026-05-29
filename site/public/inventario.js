@@ -1,13 +1,12 @@
 // Inventario Residencial Los Quetzales
-// Autogenerado desde el Excel de Registro Web (inventario 13-5-26.xlsx)
+// Autogenerado desde el Excel de Registro Web (inventario 28 de mayo.xlsx)
 
 const INVENTARIO = [
   { mza: 2, casa: 2, privada: "TUCAN", prototipo: "QUETZAL", m2Const: "80.28", m2Terreno: "61.25", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "INMEDIATA" },
   { mza: 2, casa: 4, privada: "TUCAN", prototipo: "QUETZAL", m2Const: "81", m2Terreno: "62.5", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "INMEDIATA" },
-  { mza: 2, casa: 6, privada: "TUCAN", prototipo: "QUETZAL", m2Const: "80.28", m2Terreno: "61.25", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "INMEDIATA" },
   { mza: 2, casa: 5, privada: "TUCAN", prototipo: "QUETZAL", m2Const: "80.28", m2Terreno: "61.25", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "SEMANA 40" },
+  { mza: 2, casa: 14, privada: "TUCAN", prototipo: "QUETZAL PLUS", m2Const: "111.81", m2Terreno: "62.5", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "INMEDIATA" },
   { mza: 2, casa: 26, privada: "TUCAN", prototipo: "QUETZAL PLUS", m2Const: "111.81", m2Terreno: "62.5", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "INMEDIATA" },
-  { mza: 2, casa: 27, privada: "TUCAN", prototipo: "QUETZAL PLUS", m2Const: "110.73", m2Terreno: "61.25", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "INMEDIATA" },
   { mza: 2, casa: 35, privada: "TUCAN", prototipo: "QUETZAL PLUS", m2Const: "110.73", m2Terreno: "61.25", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "INMEDIATA" },
   { mza: 2, casa: 36, privada: "TUCAN", prototipo: "QUETZAL PLUS", m2Const: "111.81", m2Terreno: "62.5", esquema: "NO APLICA PARA INFONAVIT TRADICIONAL, NI TOTAL MENOR A 11 UMAS", estatus: "disponible", entrega: "INMEDIATA" },
   { mza: 3, casa: 1, privada: "AVE DE PARAISO", prototipo: "QUETZAL ROOF", m2Const: "81.00  M2", m2Terreno: "62.5", esquema: "TODOS LOS CREDITOS", estatus: "no-disponible", entrega: "SEMANA 38" },
