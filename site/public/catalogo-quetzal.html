@@ -88,8 +88,9 @@
         </div>
       </div>
       <!-- Ficha técnica imagen -->
-      <div>
-        <img src="Material/Quetzal/FICHA-TECNICA-QUETZAL.jpg" alt="Ficha técnica Modelo Quetzal" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-md);">
+      <div style="cursor:pointer;" onclick="openLightbox('Material/Quetzal/FICHA-TECNICA-QUETZAL.jpg')">
+        <img src="Material/Quetzal/FICHA-TECNICA-QUETZAL.jpg" alt="Ficha técnica Modelo Quetzal" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-md);transition:transform 0.2s ease-in-out;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'">
+        <p style="text-align:center;font-size:12px;color:var(--gray-500);margin-top:8px;font-family:'Poppins',sans-serif;">🔍 Haz clic en la imagen para ampliar la Ficha Técnica</p>
       </div>
     </div>
   </div>
