@@ -35,8 +35,8 @@
 
 <!-- CINTILLO DE ANUNCIO (URGENCIA) -->
 <div style="background: linear-gradient(135deg, #e84a10, #b33000); color: #fff; text-align: center; padding: 10px 14px; font-size: 13.5px; font-family: 'Poppins', sans-serif; font-weight: 700; z-index: 1001; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
-  <span>🔥 ¡ÚLTIMAS CASAS DISPONIBLES! Quedan únicamente las últimas 3 unidades (solo modelo Quetzal Plus) en Privada Tucán (Manzana 2).</span>
-  <a href="tucan.html" style="color: #fff; text-decoration: underline; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Ver disponibilidad →</a>
+  <span>📢 ¡NUEVA PRIVADA AVE DE PARAÍSO! Conoce el nuevo inventario de la Manzana 3 en preventa exclusiva.</span>
+  <a href="ave-de-paraiso.html" style="color: #fff; text-decoration: underline; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Ver disponibilidad →</a>
 </div>
 
 <nav class="navbar">
@@ -70,8 +70,8 @@
 
     <!-- TABS MANZANA -->
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;">
-      <button class="tab-btn active-green" id="tab-m2" onclick="switchMza(2)">🟢 Manzana 2 — Tucán (Venta)</button>
-      <button class="tab-btn" id="tab-m3" onclick="switchMza(3)">🔥 Manzana 3 — Ave del Paraíso (Preventa)</button>
+      <button class="tab-btn" id="tab-m2" onclick="switchMza(2)">🚫 Manzana 2 — Tucán (100% VENDIDO)</button>
+      <button class="tab-btn active-orange" id="tab-m3" onclick="switchMza(3)">🔥 Manzana 3 — Ave del Paraíso (Preventa)</button>
     </div>
 
     <!-- VISTA: Croquis / Tabla -->
@@ -131,10 +131,10 @@
   <div class="container">
     <div class="folleto-banner">
       <div>
-        <h3>📥 Lista de Precios — 30 de Abril 2026</h3>
+        <h3>📥 Lista de Precios — Vigentes a Diciembre 2026</h3>
         <p>Precios actualizados de todos los modelos, versiones y manzanas del proyecto.</p>
       </div>
-      <a href="Material/Informacion/Lista_Precios_Quetzales_30_de_abril_de_2026.pdf" download class="btn-white">⬇ Descargar PDF</a>
+      <a href="Material/Informacion/LISTA_DE_PRECIOS_DICIEMBRE_2026.pdf" download class="btn-white">⬇ Descargar PDF</a>
     </div>
   </div>
 </section>
@@ -165,7 +165,7 @@
       <div class="footer-col-title">Descargas</div>
       <div class="footer-links">
         <a href="Material/Informacion/UNA_NUEVA_HISTORIA (2).pdf" download>Folleto del Proyecto</a>
-        <a href="Material/Informacion/Lista_Precios_Quetzales_30_de_abril_de_2026.pdf" download>Lista de Precios</a>
+        <a href="Material/Informacion/LISTA_DE_PRECIOS_DICIEMBRE_2026.pdf" download>Lista de Precios</a>
       </div>
     </div>
     <div>
@@ -194,7 +194,7 @@ let liveData = JSON.parse(JSON.stringify(INVENTARIO));
 // ── CONFIG CROQUIS ────────────────────────────────────────────
 const MZA_CONFIG = {
   2: {
-    nombre: 'Tucán', badge: '🔥 Últimas Casas', color: 'var(--green-dark)',
+    nombre: 'Tucán', badge: '🚫 100% Vendido', color: '#5a6472',
     plano: 'Planos/CONDOMINIO 2 TUCAN.png',
     leyenda: [
       { color: '#F4A460', label: 'Modelo Quetzal' },
@@ -216,7 +216,7 @@ const MZA_CONFIG = {
   }
 };
 
-let currentMza = 2;
+let currentMza = 3;
 let currentFilter = 'todos';
 
 // ── SUPABASE LOAD + REALTIME ──────────────────────────────────
@@ -264,7 +264,7 @@ function updateHeroBadge(live) {
   if (!b) return;
   b.innerHTML = live
     ? '<span style="display:inline-flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse-live 2s infinite;"></span>Disponibilidad en Tiempo Real</span>'
-    : 'Inventario Actualizado · Mayo 2026';
+    : 'Inventario Actualizado · Agosto 2026';
 }
 
 function subscribeRealtime() {

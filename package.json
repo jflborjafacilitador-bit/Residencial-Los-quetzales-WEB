@@ -1,0 +1,13 @@
+{
+  "name": "residencial-los-quetzales-web",
+  "version": "1.0.0",
+  "description": "Sitio web de Residencial Los Quetzales",
+  "scripts": {
+    "dev": "npx --yes live-server --port=8082 --no-browser",
+    "vite": "npx vite"
+  },
+  "dependencies": {
+    "live-server": "^1.2.2",
+    "xlsx": "^0.18.5"
+  }
+}
