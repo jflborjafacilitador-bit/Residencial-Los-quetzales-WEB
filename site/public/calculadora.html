@@ -119,6 +119,23 @@ body { background: #f0f8ef; }
 .mobile-menu a.active { color: var(--green); }
 @media(min-width: 769px) { .mobile-menu { display: none !important; } .hamburger { display: none !important; } }
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1477068090485003');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1477068090485003&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -141,7 +158,7 @@ body { background: #f0f8ef; }
     <a href="calculadora.html" class="active">Calculadora</a>
     <a href="contacto.html">Contacto</a>
   </div>
-  <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary">📅 Agendar Visita</a>
+  <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" onclick="fbq('track', 'Schedule');" target="_blank" class="btn-primary">📅 Agendar Visita</a>
   <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 
@@ -153,7 +170,7 @@ body { background: #f0f8ef; }
   <a href="propiedades.html">Disponibilidad</a>
   <a href="calculadora.html" class="active">Calculadora</a>
   <a href="contacto.html">Contacto</a>
-  <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" target="_blank" class="btn-primary" style="margin:12px 16px;">📅 Agendar Visita</a>
+  <a href="https://api.leadconnectorhq.com/widget/booking/8DWbCUQOKV9Gci0MxQWQ" onclick="fbq('track', 'Schedule');" target="_blank" class="btn-primary" style="margin:12px 16px;">📅 Agendar Visita</a>
 </div>
 
 <!-- HERO -->
